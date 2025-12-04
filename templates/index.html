@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanic Survival Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container my-5">
+    <h2 class="text-center mb-4">Titanic Survival Prediction</h2>
+    <form method="POST" class="p-4 shadow rounded bg-light">
+        <div class="row">
+            {% for feature, options in dropdown_options.items() %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ feature.replace('_', ' ').title() }}</label>
+                <select class="form-select" name="{{ feature }}" required>
+                    <option value="" selected disabled>Select {{ feature }}</option>
+                    {% for option in options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+
+            <!-- Numerical inputs -->
+            {% for col in ['sqft_above', 'sqft_basement', 'sqft_lot', 'sqft_living'] %}
+            <div class="col-md-3 mb-3">
+                <label class="form-label">{{ col.replace('_', ' ').title() }}</label>
+                <input type="number" step="any" class="form-control" name="{{ col }}" placeholder="Enter {{ col }}">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg mt-3">Predict Survival</button>
+        </div>
+    </form>
+
+    {% if prediction is not none %}
+    <div class="alert alert-info text-center mt-4">
+        <h4>Predicted Survival: <strong>{{ 'Yes' if prediction==1 else 'No' }}</strong></h4>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
